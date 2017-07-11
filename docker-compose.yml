@@ -1,0 +1,7 @@
+db:
+  image: mongo:latest
+  command: ["mongod", "--smallfiles"]
+  volumes:
+    - ./mongodata:/data/db
+  ports:
+    - "8803:27017"
