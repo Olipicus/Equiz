@@ -16,3 +16,12 @@ services:
       - ./api/config.prod.json:/config.json
     ports: 
       - "8080:8080"
+  
+  proxy:
+    image: nginx:alpine
+    volumes:
+    - /etc/letsencrypt/live/www.olipicus.com/fullchain.pem:/etc/nginx/ssl/server.crt:ro
+    - /etc/letsencrypt/live/www.olipicus.com/privkey.pem:/etc/nginx/ssl/server.key:ro
+    - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    links:
+      - app
