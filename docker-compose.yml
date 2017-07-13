@@ -1,7 +1,19 @@
-db:
-  image: mongo:latest
-  command: ["mongod", "--smallfiles"]
-  volumes:
-    - ./mongodata:/data/db
-  ports:
-    - "8803:27017"
+version: '3'
+services:
+  db:
+    image: mongo:latest
+    command: ["mongod", "--smallfiles"]
+    volumes:
+      - ./mongodata:/data/db
+    ports:
+      - "8803:27017"
+
+  app:
+    build: ./api
+    links:
+      - db
+    volumes:
+      - ./api/config.prod.json:/config.json
+    ports: 
+      - "8080:8080"
+

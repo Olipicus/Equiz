@@ -1,0 +1,8 @@
+{
+    "channel_secret" : "c2335c655cb3a9c617db1074245247b9",
+    "channel_token" : "kM4VU0dcCz19DKGPf0UNfiOc9pEZmmTxhtpQnqWNLcFtHhuNpgB5e+VGO6b7r/fTDTkinFpaBQE/H61aFDeiEAQXVF3BmATd4Q0tJy938J89iQEtKbZnJ444J44er6aYwlLp/vjBaG1AENc4CTPYdwdB04t89/1O/w1cDnyilFU=",
+    "mongodb": {
+        "address" : "db:27017",
+        "db" : "equiz"
+    }
+}
