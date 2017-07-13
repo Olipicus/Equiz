@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   db:
     image: mongo:latest
@@ -16,4 +16,3 @@ services:
       - ./api/config.prod.json:/config.json
     ports: 
       - "8080:8080"
-
