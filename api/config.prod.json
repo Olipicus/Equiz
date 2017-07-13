@@ -1,6 +1,6 @@
 {
-    "channel_secret" : "c2335c655cb3a9c617db1074245247b9",
-    "channel_token" : "kM4VU0dcCz19DKGPf0UNfiOc9pEZmmTxhtpQnqWNLcFtHhuNpgB5e+VGO6b7r/fTDTkinFpaBQE/H61aFDeiEAQXVF3BmATd4Q0tJy938J89iQEtKbZnJ444J44er6aYwlLp/vjBaG1AENc4CTPYdwdB04t89/1O/w1cDnyilFU=",
+    "channel_secret" : "efabd10b42453ae00efc159d8aaf8d23",
+    "channel_token" : "CR6H85uR+XIjaiqYOAF4pVpSwoaYY5Vnqjtd3X/l/UpB3y1hTukJ9t7d/H9PTIKnNWqybwIFufwdIDG6/Uu9ZnVV7CENeJ7hpcWYALk5SosMw1hrFlm4R3rZ9Jj+5o+RFM+db9Uu5L3PMzq29LIgLgdB04t89/1O/w1cDnyilFU=",
     "mongodb": {
         "address" : "db:27017",
         "db" : "equiz"
