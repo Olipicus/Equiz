@@ -8,7 +8,7 @@ import (
 
 func TestRegisterEvent(t *testing.T) {
 
-	service := New("../config.dev.json")
+	service := New("../config.json")
 
 	mgh := service.mgh.GetSession()
 	defer mgh.Close()
