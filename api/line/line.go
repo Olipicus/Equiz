@@ -50,15 +50,16 @@ func (app *LineApp) CallbackHandler(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				profile, err := app.bot.GetProfile(event.Source.UserID).Do()
-
-				if err != nil {
-					log.Fatalf("Got Error when get Line profile: %v", err)
-				}
 
 				re := regexp.MustCompile("^#.*")
 
 				if re.MatchString(message.Text) {
+					profile, err := app.bot.GetProfile(event.Source.UserID).Do()
+
+					if err != nil {
+						log.Fatalf("Got Error when get Line profile: %v", err)
+					}
+
 					user := equiz.User{UserName: profile.DisplayName, LineID: profile.UserID, Pic: profile.PictureURL}
 					event := equiz.Event{EventTag: message.Text}
 					app.equizService.RegisterEvent(&user, &event)
