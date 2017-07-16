@@ -1,6 +1,7 @@
 package line
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"regexp"
@@ -32,6 +33,16 @@ func NewLineApp(channelSecret string, channelToken string, service *equiz.EquizS
 	}, nil
 }
 
+func checkEventMessage(message string) error {
+	re := regexp.MustCompile("^#.*")
+
+	if re.MatchString(message) {
+		return nil
+	}
+
+	return errors.New("Message mismatch")
+}
+
 //CallbackHandler : handler
 func (app *LineApp) CallbackHandler(w http.ResponseWriter, r *http.Request) {
 	events, err := app.bot.ParseRequest(r)
@@ -53,35 +64,32 @@ func (app *LineApp) CallbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 
-				log.Printf("Got message %s", message.Text)
-				re := regexp.MustCompile("^#.*")
-
-				if re.MatchString(message.Text) {
-					log.Printf("Message matched event template")
-					profile, err := app.bot.GetProfile(event.Source.UserID).Do()
-
-					if err != nil {
-						log.Fatalf("Got Error when get Line profile: %v", err)
-					}
-
-					u := equiz.User{ID: bson.NewObjectId(), UserName: profile.DisplayName, LineID: profile.UserID, Pic: profile.PictureURL}
-					e := equiz.Event{EventTag: message.Text}
-
-					err = app.equizService.RegisterEvent(&u, &e)
-
-					if err != nil {
-						switch err {
-						case equiz.ErrorNotFoundEvent:
-							app.replyText(event.ReplyToken, "ไม่พบ event ที่คุณอยากร่วม")
-						case equiz.ErrorUserExist:
-							app.replyText(event.ReplyToken, "คุณได้ทำการลงทะเบียนไปแล้ว")
-						default:
-							log.Printf("Got Error when Register Event: %v", err)
-						}
-					}
-
-					app.replyText(event.ReplyToken, "ยินดีต้อนรับ เตรียมรอคำถามได้เลย")
+				if err := checkEventMessage(message.Text); err != nil {
+					return
 				}
+
+				profile, err := app.bot.GetProfile(event.Source.UserID).Do()
+				if err != nil {
+					log.Fatalf("Got Error when get Line profile: %v", err)
+				}
+
+				u := equiz.User{ID: bson.NewObjectId(), UserName: profile.DisplayName, LineID: profile.UserID, Pic: profile.PictureURL}
+				e := equiz.Event{EventTag: message.Text}
+
+				err = app.equizService.RegisterEvent(&u, &e)
+
+				if err != nil {
+					switch err {
+					case equiz.ErrorNotFoundEvent:
+						app.replyText(event.ReplyToken, "ไม่พบ event ที่คุณอยากร่วม")
+					case equiz.ErrorUserExist:
+						app.replyText(event.ReplyToken, "คุณได้ทำการลงทะเบียนไปแล้ว")
+					default:
+						log.Printf("Got Error when Register Event: %v", err)
+					}
+				}
+
+				app.replyText(event.ReplyToken, "ยินดีต้อนรับ เตรียมรอคำถามได้เลย")
 			}
 		}
 	}
