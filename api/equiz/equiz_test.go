@@ -14,7 +14,7 @@ func TestRegisterEvent(t *testing.T) {
 	defer mgh.Close()
 
 	collEvent := mgh.DB(service.mgh.DBName).C("event")
-	//collUserEvent := mgh.DB(service.mgh.DBName).C("user_event")
+	collUserEvent := mgh.DB(service.mgh.DBName).C("user_event")
 
 	user := User{ID: bson.NewObjectId(), LineID: "test01", UserName: "testuser", Pic: "test.png"}
 	event := Event{ID: bson.NewObjectId(), EventTag: "#test", EventName: "test event"}
@@ -25,7 +25,7 @@ func TestRegisterEvent(t *testing.T) {
 	}
 
 	//Test Not Found Event
-	if err := service.RegisterEvent(&user, &Event{EventTag: "#xxx"}); err != errorNotFoundEvent {
+	if err := service.RegisterEvent(&user, &Event{EventTag: "#xxx"}); err != ErrorNotFoundEvent {
 		t.Errorf("It should not found event error %v", err)
 	}
 
@@ -35,10 +35,10 @@ func TestRegisterEvent(t *testing.T) {
 	}
 
 	//Test User Repeat register event
-	if err := service.RegisterEvent(&user, &event); err != errorUserExist {
+	if err := service.RegisterEvent(&user, &event); err != ErrorUserExist {
 		t.Errorf("Should got user exist %v", err)
 	}
 
-	//collEvent.Remove(bson.M{"_id": event.ID})
-	//collUserEvent.Remove(bson.M{"_id": user.ID})
+	collEvent.Remove(bson.M{"_id": event.ID})
+	collUserEvent.Remove(bson.M{"_id": user.ID})
 }
