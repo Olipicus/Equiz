@@ -29,8 +29,8 @@ type EquizService struct {
 	config     *config.Table
 }
 
-var errorUserExist error = errors.New("User is exists")
-var errorNotFoundEvent error = errors.New("Not Found Event")
+var ErrorUserExist error = errors.New("User is exists")
+var ErrorNotFoundEvent error = errors.New("Not Found Event")
 
 func New(configPath string) *EquizService {
 
@@ -59,7 +59,7 @@ func (service *EquizService) RegisterEvent(user *User, event *Event) error {
 	countEvent, err := collEvent.Find(bson.M{"event_tag": event.EventTag}).Count()
 
 	if countEvent == 0 {
-		return errorNotFoundEvent
+		return ErrorNotFoundEvent
 	}
 
 	if err != nil {
@@ -75,7 +75,7 @@ func (service *EquizService) RegisterEvent(user *User, event *Event) error {
 		collUserEvent.Insert(user)
 		return nil
 	case countUser >= 1:
-		return errorUserExist
+		return ErrorUserExist
 	}
 
 	return nil
